@@ -1,14 +1,14 @@
-function process(inputdir)
+function process(raw,results)
 % Process raw scan data to reconstruct images and calculate parameter maps
 %
 % Input
-%   inputdir=directory containing data on XNAT
+%   raw=directory containing data on XNAT
 %
 % Output 
-%   Results are saved in inputdir/Output
+%   Results are saved in raw/Output
 
 % Load in textfile with input parameters
-fid = fopen(fullfile(inputdir,'process_input.txt'),'r');
+fid = fopen(fullfile(raw,'process_input.txt'),'r');
 if fid == -1
     sprintf('Error: Could not open method file');
 end
@@ -20,13 +20,13 @@ M = textscan(fid,'%s %s',...
 'Delimiter','=');
 
 % List the study path and experiments to process
-info.spath = fullfile(inputdir,M{2}{contains(M{1},'filename')});
+info.spath = fullfile(raw);
 
 % Directory to save
-outputdir = fullfile(inputdir,'Output');
+outputdir = fullfile(results,'Output');
 
-% Create save directory
-mkdir(fullfile(inputdir,'Output'));
+% Create save directory if it doesn't exist
+mkdir(fullfile(results,'Output'));
 
 %% HRANAT
 if ~isempty(find(contains(M{1},'scannum.hranat')))

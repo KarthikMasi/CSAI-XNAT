@@ -1,4 +1,3 @@
-filename=20181108_124756_MB4_DKK_7_MA1321_1_1
 scannum.hranat=8
 scannum.sir=9
 scannum.dti=10
