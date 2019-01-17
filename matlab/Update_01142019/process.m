@@ -37,7 +37,10 @@ if ~isempty(find(contains(M{1},'scannum.hranat')))
     ws_hranat.images = remmi.recon(info);
     
     % Save image in NIFTI
-    niftiwrite(ws_hranat.images.img,fullfile(outputdir,'hranat.nii'));
+    %niftiwrite(ws_hranat.images.img,fullfile(outputdir,'hranat.nii'));
+    hranat_nii=make_nii(ws_hranat.images.img);
+    
+    save_nii(hranat_nii,fullfile(outputdir,'hranat.nii'));
 end
 
 %% MSE
@@ -130,9 +133,16 @@ if ~isempty(find(contains(M{1},'scannum.sir')))
     ws_sir.qMT = remmi.ir.qmt(ws_sir.dimages); 
     
     % Convert maps to NIFTI
-    niftiwrite(ws_sir.qMT.BPF,fullfile(outputdir,'BPF.nii'));
-    niftiwrite(ws_sir.qMT.T1,fullfile(outputdir,'T1.nii'));
-    niftiwrite(ws_sir.qMT.inv_eff,fullfile(outputdir,'inv_eff.nii'));
+%     niftiwrite(ws_sir.qMT.BPF,fullfile(outputdir,'BPF.nii'));
+%     niftiwrite(ws_sir.qMT.T1,fullfile(outputdir,'T1.nii'));
+%     niftiwrite(ws_sir.qMT.inv_eff,fullfile(outputdir,'inv_eff.nii'));
+    bpf_nii=make_nii(ws_sir.qMT.BPF);
+    t1_nii=make_nii(ws_sir.qMT.T1);
+    inveff_nii=make_nii(ws_sir.qMT.inv_eff);
+    
+    save_nii(bpf_nii,fullfile(outputdir,'BPF.nii'));
+    save_nii(t1_nii,fullfile(outputdir,'T1.nii'));
+    save_nii(inveff_nii,fullfile(outputdir,'inv_eff.nii'));
 end
 
 %% DTI
@@ -153,8 +163,13 @@ if ~isempty(find(contains(M{1},'scannum.dti')))
     ws_dti.dti = remmi.dwi.dti(ws_dti.images);
     
     % Convert maps to NIFTI
-    niftiwrite(ws_dti.dti.fa,fullfile(outputdir,'FA.nii'));
-    niftiwrite(ws_dti.dti.adc,fullfile(outputdir,'ADC.nii'));
+%     niftiwrite(ws_dti.dti.fa,fullfile(outputdir,'FA.nii'));
+%     niftiwrite(ws_dti.dti.adc,fullfile(outputdir,'ADC.nii'));
+    fa_nii=make_nii(ws_sir.qMT.fa);
+    adc_nii=make_nii(ws_sir.qMT.adc);
+    
+    save_nii(fa_nii,fullfile(outputdir,'FA.nii'));
+    save_nii(adc_nii,fullfile(outputdir,'ADC.nii'));
 end
 
 
