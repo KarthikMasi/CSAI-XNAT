@@ -165,8 +165,8 @@ if ~isempty(find(contains(M{1},'scannum.dti')))
     % Convert maps to NIFTI
 %     niftiwrite(ws_dti.dti.fa,fullfile(outputdir,'FA.nii'));
 %     niftiwrite(ws_dti.dti.adc,fullfile(outputdir,'ADC.nii'));
-    fa_nii=make_nii(ws_sir.qMT.fa);
-    adc_nii=make_nii(ws_sir.qMT.adc);
+    fa_nii=make_nii(ws_dti.dti.fa);
+    adc_nii=make_nii(ws_dti.dti.adc);
     
     save_nii(fa_nii,fullfile(outputdir,'FA.nii'));
     save_nii(adc_nii,fullfile(outputdir,'ADC.nii'));
