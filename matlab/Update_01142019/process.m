@@ -3,9 +3,10 @@ function process(raw,results)
 %
 % Input
 %   raw=directory containing data on XNAT
+%   results=directory containing output data on XNAT
 %
 % Output 
-%   Results are saved in raw/Output
+%   Results are saved in 'results' folder
 
 % Load in textfile with input parameters
 fid = fopen(fullfile(raw,'process_input.txt'),'r');
@@ -41,6 +42,8 @@ if ~isempty(find(contains(M{1},'scannum.hranat')))
     hranat_nii=make_nii(ws_hranat.images.img);
     
     save_nii(hranat_nii,fullfile(outputdir,'hranat.nii'));
+    
+    generate_pdf(hranat_nii,outputdir,'hranat');
 end
 
 %% MSE
@@ -143,6 +146,8 @@ if ~isempty(find(contains(M{1},'scannum.sir')))
     save_nii(bpf_nii,fullfile(outputdir,'BPF.nii'));
     save_nii(t1_nii,fullfile(outputdir,'T1.nii'));
     save_nii(inveff_nii,fullfile(outputdir,'inv_eff.nii'));
+    
+    generate_pdf(bpf_nii,outputdir,'bpf',[0 .3]);
 end
 
 %% DTI
@@ -170,6 +175,18 @@ if ~isempty(find(contains(M{1},'scannum.dti')))
     
     save_nii(fa_nii,fullfile(outputdir,'FA.nii'));
     save_nii(adc_nii,fullfile(outputdir,'ADC.nii'));
+    
+    generate_pdf(fa_nii,outputdir,'fa',[0 1]);
+    generate_pdf(adc_nii,outputdir,'adc',[0 .4]);
 end
+
+%% PDF Generation for QA
+
+% Current images: HRANAT, BPF, T1, Inv_eff, ADC, FA
+
+% XNAT detects only 1 master pdf
+create_master_pdf(outputdir);
+status = movefile(fullfile(outputdir,'nii.pdf'),results);
+system(['rm -f ' fullfile(outputdir,'*.pdf')]);
 
 

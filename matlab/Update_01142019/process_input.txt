@@ -1,3 +1,0 @@
-scannum.hranat=8
-scannum.sir=9
-scannum.dti=10

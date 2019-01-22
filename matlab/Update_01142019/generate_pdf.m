@@ -1,18 +1,30 @@
 function generate_pdf(nii_file,savdir,filename,varargin)
 img=nii_file.img;
-img=reorient(abs(img));
+
+if strcmp(filename,'hranat')
+    img=reorient(abs(img),'hranat');
+    img=histeq(img./max(img(:)));
+    sl=18;
+else
+    img=reorient(abs(img));
+    sl=6;
+end
 ind = find(img(:)>0);
 [~,~,k]=ind2sub(size(img),ind);
 
 switch nargin
     case 3
         figure(1);
-        montage(img(:,:,min(k):3:max(k)));colormap(jet);colorbar;
+        if strcmp(filename,'hranat')
+            montage(img(:,:,min(k):sl:max(k)));colormap(gray);colorbar;
+        else
+            montage(img(:,:,min(k):sl:max(k)));colormap(jet);colorbar;
+        end
         axis equal;
     case 4
         color_range=varargin{1};
         figure(1);
-        montage(img(:,:,min(k):3:max(k)));caxis(color_range);colormap(jet);colorbar;
+        montage(img(:,:,min(k):sl:max(k)));caxis(color_range);colormap(jet);colorbar;
         axis equal;
     otherwise
         error('Unexpected inputs');
