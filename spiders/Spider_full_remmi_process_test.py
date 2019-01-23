@@ -49,7 +49,7 @@ process(input,'$temp_dir')
 system(['mkdir ' fullfile('$temp_dir','RESULTS')]);
 system(['mv ' fullfile('$temp_dir','Output','*.mat') ' ' fullfile('$temp_dir','RESULTS')])
 system(['mv ' fullfile('$temp_dir','Output','*.nii') ' ' fullfile('$temp_dir','RESULTS')])
-system(['mv ' fullfule('$temp_dir','Output','*.pdf') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfile('$temp_dir','Output','*.pdf') ' ' fullfile('$temp_dir','RESULTS')])
 
 """
 
