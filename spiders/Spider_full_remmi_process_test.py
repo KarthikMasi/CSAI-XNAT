@@ -38,17 +38,18 @@ system(['cp -r ' fullfile('$scan_data') ' ' fullfile('$temp_dir','INPUT')])
 % From  spider Inputs
 %study = '${assessor_label}';
 
-addpath(genpath('/data/mcr/masimatlab/trunk/xnatspiders/matlab/Mouse_mat_nii/'));
+addpath(genpath('/data/mcr/masimatlab/trunk/xnatspiders/matlab/Mouse_mat_nii_update/'));
 addpath('$matlab_utils');
 
 input = fullfile('$temp_dir','INPUT','raw')
-full_remmi_process_test20180620_7T(input,'$temp_dir')
-
+%full_remmi_process_test20180620_7T(input,'$temp_dir')
+process(input,'$temp_dir')
 
 % Move files
 system(['mkdir ' fullfile('$temp_dir','RESULTS')]);
-system(['mv ' fullfile('$temp_dir','*.mat') ' ' fullfile('$temp_dir','RESULTS')])
-system(['mv ' fullfile('$temp_dir','NIFTI') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfile('$temp_dir','Output','*.mat') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfile('$temp_dir','Output','*.nii') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfule('$temp_dir','Output','*.pdf') ' ' fullfile('$temp_dir','RESULTS')])
 
 """
 
