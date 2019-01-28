@@ -5,11 +5,12 @@ from dax import XnatUtils, ScanProcessor
 LOGGER = logging.getLogger('dax')
 
 DEFAULT_SPIDER_PATH = '/data/mcr/masimatlab/trunk/xnatspiders/spiders/Spider_full_remmi_process_test.py'
-DEFAULT_WALLTIME = '01:00:00'
+DEFAULT_WALLTIME = '15:00:00'
 DEFAULT_MEM = '8000'
-DEFAULT_MOUSE_NII_PATH = '/data/mcr/masimatlab/trunk/xnatspiders/matlab/Mouse_mat_nii/'
+DEFAULT_MOUSE_NII_PATH = '/data/mcr/masimatlab/trunk/xnatspiders/matlab/Mouse_mat_nii_update/'
 DEFAULT_MATLAB_UTILS_PATH = '/data/mcr/masimatlab/trunk/utils/matlab'
-DEFAULT_MATLAB_PATH = '/opt/easybuild/software/Core/MATLAB/2017a/bin/matlab'
+DEFAULT_MATLAB_PATH = '/accre/arch/easybuild/software/BinDist/MATLAB/2018b/bin/matlab'
+#DEFAULT_MATLAB_PATH = '/opt/easybuild/software/Core/MATLAB/2017a/bin/matlab'
 DEFAULT_TMP_PATH= '/home/ramadak/Results'
 
 csai_CMD = '''python -u {spider_path} \
@@ -24,43 +25,11 @@ csai_CMD = '''python -u {spider_path} \
 --matlab_bin="{matlab_bin}" \
 '''
 
-def get_uri(xnat, proj, subj, sess, scan, res,job_dir_path):
-    scan_file_uri = 'xnat://projects/{0}/subjects/{1}/experiments/{2}/scans/{3}/resources/{4}/'
+def get_scan_resource_uri(xnat,proj,subj,sess,scan):
+    scan_file_uri = 'xnat://projects/{0}/subjects/{1}/experiments/{2}/scans/{3}/resources/{4}'
     scan_obj = xnat.select('/projects/' + proj + '/subjects/' + subj + '/experiments/' + sess + '/scans/' + scan)
-    uri_file = scan_obj.resource(res).files().get()
-    #print("JOB_DIR_PATH",job_dir_path)
-    os.system("mkdir "+job_dir_path)
-    uri_path = scan_obj.resource(res).get(job_dir_path,extract=True)
-    uri_path = job_dir_path+"/"+res
-    #print uri_file
-    #uri_path = scan_file_uri.format(proj, subj, sess, scan, res)
-    #csess = XnatUtils.CachedImageSession(xnat,proj,subj,sess)
-    #uri_path = XnatUtils.get_good_scans(csess,'RAW')
-    return uri_path
-
-
-def get_resource_uri(xnat,proj, subj, sess, scan, res,job_dir_path):
-    scan_file_uri = 'xnat://projects/{0}/subjects/{1}/experiments/{2}/scans/{3}/out/resources/{4}'
-    #resource_obj = xnat.select('/projects/' + proj + '/subjects/' + subj + '/experiments/'+ sess + '/scans/' + scan +'/resources/'+res)
-    #print("resource_obj",resource_obj)
-    #resource_obj.get(job_dir_path,extract=True)
-    uri_path = scan_file_uri.format(proj, subj, sess,scan,res)
-    uri = xnat.select(uri_path)
-    #print(uri_path)
-    uri.get(job_dir_path,extract=True)
-    return uri_path
-
-def get_file_resource_uri(proj, subj, sess, assessor, res, file):
-    scan_file_uri = 'xnat://projects/{0}/subjects/{1}/experiments/{2}/scans/{3}/resources/{4}/files/{5}'
-    uri_path = scan_file_uri.format(proj, subj, sess, assessor, res, file)
-    return uri_path
-
-def get_single_file_resource_uri(xnat, proj, subj, sess, assr, res):
-    assr_file_uri = 'xnat://projects/{0}/subjects/{1}/experiments/{2}/assessors/{3}/out/resources/{4}/files/{5}'
-    assr_obj = xnat.select('/projects/' + proj + '/subjects/' + subj + '/experiments/' + sess + '/assessors/' + assr)
-
-    uri_file = assr_obj.resource(res).files().get()[0]
-    uri_path = assr_file_uri.format(proj, subj, sess, assr, res, uri_file)
+    res_file = scan_obj.resources()[0].label()
+    uri_path = scan_file_uri.format(proj,subj,sess,scan,res_file)
     return uri_path
 
 class csai_nii_processor(ScanProcessor):
@@ -108,11 +77,10 @@ class csai_nii_processor(ScanProcessor):
         project = assessor.parent().parent().parent().label()                    
         subject = assessor.parent().parent().label()                             
         session = assessor.parent().label()                                      
-        scan = assessor.label().split('-x-')[3]
+        csess = XnatUtils.CachedImageSession(assessor._intf,project,subject,session)
         xnat = XnatUtils.get_interface()
-        #scan_data = get_resource_uri(xnat,project,subject,session,scan,'raw',job_dir_path)
-        scan_data = get_uri(xnat,project,subject,session,scan,'raw',job_dir_path)
-        #scan_data = os.path.join(job_dir_path,'raw')
+        scan= csess.scans()[0].label() 
+        scan_data = get_scan_resource_uri(xnat,project,subject,session,scan)
         cmd = csai_CMD.format(spider_path = self.spider_path,
                                job_dir_path = job_dir_path,
                                assessor_label = assessor.label(),
