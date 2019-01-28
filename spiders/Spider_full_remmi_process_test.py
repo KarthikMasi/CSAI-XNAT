@@ -41,9 +41,11 @@ process(scandata,'$temp_dir')
 
 % Move files
 system(['mkdir ' fullfile('$temp_dir','RESULTS')]);
-system(['mv ' fullfile('$temp_dir','Output','*.mat') ' ' fullfile('$temp_dir','RESULTS')])
-system(['mv ' fullfile('$temp_dir','Output','*.nii') ' ' fullfile('$temp_dir','RESULTS')])
-system(['mv ' fullfile('$temp_dir','Output','*.pdf') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfile('$temp_dir','results','Full_Data') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfile('$temp_dir','results','Parameter_Maps') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfile('$temp_dir','results','Split_Data') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfile('$temp_dir','results','Interp') ' ' fullfile('$temp_dir','RESULTS')])
+system(['mv ' fullfile('$temp_dir','results','*.pdf') ' ' fullfile('$temp_dir','RESULTS')])
 
 """
 
