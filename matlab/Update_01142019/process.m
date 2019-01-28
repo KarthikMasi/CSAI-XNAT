@@ -1,4 +1,4 @@
-function fullprocess(raw,results)
+function process(raw,results)
 
 %% Process Raw Scan Data
 process_scan(raw,results)
