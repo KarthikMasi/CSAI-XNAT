@@ -1,4 +1,4 @@
-function process(raw,results)
+function process_scan(raw,results)
 % Process raw scan data to reconstruct images and calculate parameter maps
 %
 % Input
@@ -24,32 +24,42 @@ M = textscan(fid,'%s %s',...
 info.spath = fullfile(raw);
 
 % Directory to save
-outputdir = fullfile(results,'Output');
+fullmat = fullfile(results,'Full_Data');
+parammat = fullfile(results,'Parameter_Maps','mat');
+paramnii = fullfile(results,'Parameter_Maps','nii');
 
 % Create save directory if it doesn't exist
-mkdir(fullfile(results,'Output'));
+mkdir(fullfile(results,'Full_Data'));
+mkdir(fullfile(results,'Parameter_Maps','mat'));
+mkdir(fullfile(results,'Parameter_Maps','nii'));
 
 %% HRANAT
 if ~isempty(find(contains(M{1},'scannum.hranat')))
     info.exps=str2num(M{2}{contains(M{1},'scannum.hranat')});
-    ws_hranat = remmi.workspace(fullfile(outputdir,'hranat.mat'));
+    ws_hranat = remmi.workspace(fullfile(fullmat,'hranat.mat'));
     
     % Reconstruct the data
     ws_hranat.images = remmi.recon(info);
     
+    % Save image in MAT
+    hranat=ws_hranat.images.img;
+    % Reorient to align with atlas
+    rhranat=reorient(hranat,'hranat');
+    save(fullfile(parammat,'hranat.mat'),'rhranat');
+    
     % Save image in NIFTI
     %niftiwrite(ws_hranat.images.img,fullfile(outputdir,'hranat.nii'));
-    hranat_nii=make_nii(ws_hranat.images.img);
+    hranat_nii=make_nii(rhranat);
     
-    save_nii(hranat_nii,fullfile(outputdir,'hranat.nii'));
+    save_nii(hranat_nii,fullfile(paramnii,'hranat.nii'));
     
-    generate_pdf(hranat_nii,outputdir,'hranat');
+    generate_pdf(hranat_nii,paramnii,'hranat');
 end
 
 %% MSE
 if ~isempty(find(contains(M{1},'scannum.mse')))
     info.exps=str2num(M{2}{contains(M{1},'scannum.mse')});
-    ws_mse = remmi.workspace(fullfile(outputdir,'mse.mat'));
+    ws_mse = remmi.workspace(fullfile(fullmat,'mse.mat'));
     
     % Reconstruct the data
     ws_mse.images = remmi.recon(info);
@@ -103,7 +113,7 @@ if ~isempty(find(contains(M{1},'scannum.mse')))
     % mse.dT2spect saves to current directory if mse_full.mat is too large
     % move this to the appropriate directory
     try
-        movefile('mse.T2spect.mat',fullfile(outputdir,'mse.T2spect.mat'))
+        movefile('mse.T2spect.mat',fullfile(fullmat,'mse.T2spect.mat'))
     catch
         warning('mse.T2spect.mat is in MSE.mat');
     end
@@ -112,7 +122,7 @@ end
 %% SIR
 if ~isempty(find(contains(M{1},'scannum.sir')))
     info.exps=str2num(M{2}{contains(M{1},'scannum.sir')});
-    ws_sir = remmi.workspace(fullfile(outputdir,'sir.mat'));
+    ws_sir = remmi.workspace(fullfile(fullmat,'sir.mat'));
     
     % Reconstruct the data
     ws_sir.images = remmi.recon(info);
@@ -135,25 +145,40 @@ if ~isempty(find(contains(M{1},'scannum.sir')))
     % Perform qMT analysis
     ws_sir.qMT = remmi.ir.qmt(ws_sir.dimages); 
     
+    % Save image in MAT
+    bpf=ws_sir.qMT.BPF;
+    rawimg=abs(ws_sir.images.img(:,:,:,end));
+    t1=ws_sir.qMT.T1;
+    inveff=ws_sir.qMT.inv_eff;
+    % Reorient to align with atlas
+    rbpf=reorient(bpf);
+    rrawimg=reorient(rawimg);
+    rt1=reorient(t1);
+    rinveff=reorient(inveff);
+    save(fullfile(parammat,'bpf.mat'),'rbpf');
+    save(fullfile(parammat,'rawimg.mat'),'rrawimg');
+    
     % Convert maps to NIFTI
-%     niftiwrite(ws_sir.qMT.BPF,fullfile(outputdir,'BPF.nii'));
-%     niftiwrite(ws_sir.qMT.T1,fullfile(outputdir,'T1.nii'));
-%     niftiwrite(ws_sir.qMT.inv_eff,fullfile(outputdir,'inv_eff.nii'));
-    bpf_nii=make_nii(ws_sir.qMT.BPF);
-    t1_nii=make_nii(ws_sir.qMT.T1);
-    inveff_nii=make_nii(ws_sir.qMT.inv_eff);
+%   niftiwrite(ws_sir.qMT.BPF,fullfile(outputdir,'BPF.nii'));
+%   niftiwrite(ws_sir.qMT.T1,fullfile(outputdir,'T1.nii'));
+%   niftiwrite(ws_sir.qMT.inv_eff,fullfile(outputdir,'inv_eff.nii'));
+    bpf_nii=make_nii(rbpf);
+    t1_nii=make_nii(rt1);
+    inveff_nii=make_nii(rinveff);
+    rawimg_nii=make_nii(rrawimg);
     
-    save_nii(bpf_nii,fullfile(outputdir,'BPF.nii'));
-    save_nii(t1_nii,fullfile(outputdir,'T1.nii'));
-    save_nii(inveff_nii,fullfile(outputdir,'inv_eff.nii'));
+    save_nii(bpf_nii,fullfile(paramnii,'BPF.nii'));
+    save_nii(t1_nii,fullfile(paramnii,'T1.nii'));
+    save_nii(inveff_nii,fullfile(paramnii,'inv_eff.nii'));
+    save_nii(rawimg_nii,fullfile(paramnii,'rawimg_nii'));
     
-    generate_pdf(bpf_nii,outputdir,'bpf',[0 .3]);
+    generate_pdf(bpf_nii,paramnii,'bpf',[0 .3]);
 end
 
 %% DTI
 if ~isempty(find(contains(M{1},'scannum.dti')))
     info.exps=str2num(M{2}{contains(M{1},'scannum.dti')});
-    ws_dti = remmi.workspace(fullfile(outputdir,'dti.mat'));
+    ws_dti = remmi.workspace(fullfile(fullmat,'dti.mat'));
     
     %Reconstruct the data
     ws_dti.images = remmi.recon(info);
@@ -167,17 +192,26 @@ if ~isempty(find(contains(M{1},'scannum.dti')))
     % Perform DTI analysis
     ws_dti.dti = remmi.dwi.dti(ws_dti.images);
     
+    % Save image in MAT
+    fa=ws_dti.dti.fa;
+    adc=ws_dti.dti.adc;
+    % Reorient to align with atlas
+    rfa=reorient(fa);
+    radc=reorient(adc);
+    save(fullfile(parammat,'fa.mat'),'rfa');
+    save(fullfile(parammat,'adc.mat'),'radc');
+    
     % Convert maps to NIFTI
-%     niftiwrite(ws_dti.dti.fa,fullfile(outputdir,'FA.nii'));
-%     niftiwrite(ws_dti.dti.adc,fullfile(outputdir,'ADC.nii'));
-    fa_nii=make_nii(ws_dti.dti.fa);
-    adc_nii=make_nii(ws_dti.dti.adc);
+%   niftiwrite(ws_dti.dti.fa,fullfile(outputdir,'FA.nii'));
+%   niftiwrite(ws_dti.dti.adc,fullfile(outputdir,'ADC.nii'));
+    fa_nii=make_nii(rfa);
+    adc_nii=make_nii(radc);
     
-    save_nii(fa_nii,fullfile(outputdir,'FA.nii'));
-    save_nii(adc_nii,fullfile(outputdir,'ADC.nii'));
+    save_nii(fa_nii,fullfile(paramnii,'FA.nii'));
+    save_nii(adc_nii,fullfile(paramnii,'ADC.nii'));
     
-    generate_pdf(fa_nii,outputdir,'fa',[0 1]);
-    generate_pdf(adc_nii,outputdir,'adc',[0 .4]);
+    generate_pdf(fa_nii,paramnii,'fa',[0 1]);
+    generate_pdf(adc_nii,paramnii,'adc',[0 .4]);
 end
 
 %% PDF Generation for QA
@@ -185,8 +219,8 @@ end
 % Current images: HRANAT, BPF, T1, Inv_eff, ADC, FA
 
 % XNAT detects only 1 master pdf
-create_master_pdf(outputdir);
-status = movefile(fullfile(outputdir,'nii.pdf'),results);
-system(['rm -f ' fullfile(outputdir,'*.pdf')]);
+create_master_pdf(paramnii);
+status = movefile(fullfile(paramnii,'nii.pdf'),results);
+system(['rm -f ' fullfile(paramnii,'*.pdf')]);
 
 
