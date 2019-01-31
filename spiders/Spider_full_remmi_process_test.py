@@ -45,8 +45,6 @@ system(['mv ' fullfile('$temp_dir','Full_Data') ' ' fullfile('$temp_dir','RESULT
 system(['mv ' fullfile('$temp_dir','Parameter_Maps') ' ' fullfile('$temp_dir','RESULTS')])
 system(['mv ' fullfile('$temp_dir','Split_Data') ' ' fullfile('$temp_dir','RESULTS')])
 system(['mv ' fullfile('$temp_dir','Interp') ' ' fullfile('$temp_dir','RESULTS')])
-system(['mv ' fullfile('$temp_dir','*.pdf') ' ' fullfile('$temp_dir','RESULTS')])
-
 """
 
 if __name__ == '__main__':
