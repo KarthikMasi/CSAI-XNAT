@@ -1,4 +1,4 @@
-function datai = loadBruker(dataPath,methpars)
+function data = loadBruker(dataPath,methpars)
 % img = loadBruker(dataPath)
 % loads raw data from Bruker acquisitions & reconstructs images 
 %
@@ -50,21 +50,17 @@ end
 nslice = sum(methpars.PVM_SPackArrNSlices);
 nreps = methpars.PVM_NRepetitions;
 
-encmatrix = methpars.PVM_EncMatrix;
-matrix = methpars.PVM_Matrix;
+encmatrix = methpars.PVM_Matrix;
 if length(encmatrix) < 3 
     encmatrix(3) = 1;
 end
-if length(matrix) < 3 
-    matrix(3) = 1;
-end
 
 pe1table = methpars.PVM_EncSteps1;
-pe1table = pe1table+floor(matrix(2)/2)+1;
+pe1table = pe1table+floor(encmatrix(2)/2)+1;
 
 if encmatrix(3) > 1
     pe2table = methpars.PVM_EncSteps2;
-    pe2table = pe2table+floor(matrix(3)/2)+1;
+    pe2table = pe2table+floor(encmatrix(3)/2)+1;
 else
     pe2table = 1;
 end
@@ -152,8 +148,7 @@ data = ifftshift(ifft(ifftshift(proj,1)),1);
 % use phase encode tables
 data = reshape(data,encmatrix(1),encmatrix(2),encmatrix(3),length(echotimes),...
     nslice,diffImgs,irImgs,mtImgs,nreps);
-datai = zeros([matrix length(echotimes),nslice,diffImgs,irImgs,mtImgs,nreps]);
-datai(:,pe1table,pe2table,:,:,:,:,:,:,:,:) = data;
+data(:,pe1table,pe2table,:,:,:,:,:,:,:,:) = data;
 
 % flip odd echoes in gradient echo sequences
 if methpars.PVM_NEchoImages>1 && ~isfield(methpars,'RefPulse1')
@@ -161,27 +156,27 @@ if methpars.PVM_NEchoImages>1 && ~isfield(methpars,'RefPulse1')
     if isfield(methpars,'EchoAcqMode')
         if strcmp(methpars.EchoAcqMode,'allEchoes')
             disp('fliping...')
-            datai(:,:,:,2:2:end,:,:,:,:,:,:) = datai(end:-1:1,:,:,2:2:end,:,:,:,:,:,:);
+            data(:,:,:,2:2:end,:,:,:,:,:,:) = data(end:-1:1,:,:,2:2:end,:,:,:,:,:,:);
         end
     end
 end
 
 try
     % PE1 shift
-    np = methpars.PVM_Matrix(2);
+    np = methpars.PVM_EncMatrix(2);
     line = reshape((1:np) - 1 - round(np/2),1,[]);
     
     % if multi-slice, make the phase offset the correct size
-    ph1_offset = reshape(methpars.PVM_Phase1Offset,[1,1,1,1,nslice]);
-    ph2_offset = reshape(methpars.PVM_Phase2Offset,[1,1,1,1,nslice]);
+    ph1_offset = reshape(methpars.PVM_EffPhase1Offset,[1,1,1,1,nslice]);
+    ph2_offset = reshape(methpars.PVM_EffPhase2Offset,[1,1,1,1,nslice]);
     
-    datai = bsxfun(@times,datai,exp(-1i*2*pi*bsxfun(@times,line,ph1_offset)/methpars.PVM_Fov(2)));
+    data = bsxfun(@times,data,exp(-1i*2*pi*bsxfun(@times,line,ph1_offset)/methpars.PVM_Fov(2)));
 
     % PE2 shift
     if length(methpars.PVM_EncMatrix) > 2
         np = methpars.PVM_EncMatrix(3);
         line = reshape((1:np) - 1 - round(np/2),1,1,[]);
-        datai = bsxfun(@times,datai,exp(-1i*2*pi*bsxfun(@times,line,ph2_offset)/methpars.PVM_Fov(3)));
+        data = bsxfun(@times,data,exp(-1i*2*pi*bsxfun(@times,line,ph2_offset)/methpars.PVM_Fov(3)));
     end
 catch
     % todo: implement PE offset correction for PV5

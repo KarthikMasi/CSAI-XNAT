@@ -97,13 +97,13 @@ for ii=3:length(files1)
     img=abs(cell2mat(struct2cell(tmp)));
     
     % If HRANAT, use resolution of .05mm isotropic,
-    % otherwise use default of .15mm
+    % otherwise use .15mm for the other scans
     chk=strsplit(filenames1,'_');
     chk2=strrep(chk{end},'.mat','');
     if strcmp(chk2,'hranat')
         out=remmi_interp(img,[.05 .05 .05]);
     else
-        out=remmi_interp(img);
+        out=remmi_interp(img,[.15 .15 .15]);
     end
     
     name1=strrep(filenames1,'split','interp');

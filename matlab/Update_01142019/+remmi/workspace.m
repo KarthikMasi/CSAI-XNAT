@@ -33,10 +33,11 @@ classdef workspace < dynamicprops
             if exist(fname,'var') || isempty(fname)
                 error('workspace() requires a filename');
             elseif ischar(fname)
-                %if ~isstrprop(fname(1),'alpha')
-                %    error('The first character of "name" must be a letter');
-                %else
-                obj.filename = fname;
+                if ~isstrprop(fname(1),'alpha')
+                    error('The first character of "name" must be a letter');
+                else
+                    obj.filename = fname;
+                end
             else
                 error('"fname" must be a character string');
             end

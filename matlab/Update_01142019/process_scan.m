@@ -44,7 +44,7 @@ if ~isempty(find(contains(M{1},'scannum.hranat')))
     % Save image in MAT
     hranat=ws_hranat.images.img;
     % Reorient to align with atlas
-    rhranat=reorient(hranat,'hranat');
+    rhranat=reorient(abs(hranat),'hranat');
     save(fullfile(parammat,'hranat.mat'),'rhranat');
     
     % Save image in NIFTI
@@ -162,6 +162,7 @@ if ~isempty(find(contains(M{1},'scannum.sir')))
 %   niftiwrite(ws_sir.qMT.BPF,fullfile(outputdir,'BPF.nii'));
 %   niftiwrite(ws_sir.qMT.T1,fullfile(outputdir,'T1.nii'));
 %   niftiwrite(ws_sir.qMT.inv_eff,fullfile(outputdir,'inv_eff.nii'));
+
     bpf_nii=make_nii(rbpf);
     t1_nii=make_nii(rt1);
     inveff_nii=make_nii(rinveff);

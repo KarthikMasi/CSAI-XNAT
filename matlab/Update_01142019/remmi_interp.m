@@ -11,9 +11,6 @@ function out=remmi_interp(img,varargin)
 % Output
 %   out=interpolated image data
 
-% Resolution of map
-res=[.15 .15 .15];
-
 % Use predefined atlas and resolution data unless specified otherwise
 % Load reference atlas image
 asize=[256, 256, 512];

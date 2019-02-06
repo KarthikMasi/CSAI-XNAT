@@ -2,11 +2,9 @@ function generate_pdf(nii_file,savdir,filename,varargin)
 img=nii_file.img;
 
 if strcmp(filename,'hranat')
-    img=reorient(abs(img),'hranat');
     img=histeq(img./max(img(:)));
-else
-    img=reorient(abs(img));
 end
+
 ind = find(img(:)>0);
 [~,~,k]=ind2sub(size(img),ind);
 
