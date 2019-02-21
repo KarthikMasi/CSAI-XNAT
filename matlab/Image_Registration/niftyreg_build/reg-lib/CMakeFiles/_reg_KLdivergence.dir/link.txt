@@ -1,0 +1,2 @@
+/usr/bin/ar.exe cq lib_reg_KLdivergence.a  CMakeFiles/_reg_KLdivergence.dir/_reg_KLdivergence.cpp.o
+/usr/bin/ranlib.exe lib_reg_KLdivergence.a
