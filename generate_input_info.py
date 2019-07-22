@@ -25,7 +25,9 @@ def redcap_project_access(API_KEY):
 def retrieve_subject(data,subject_id):
     """
     Search for scan data folder name where subject ID matches. 
-    :return: bool whether exists
+    :param data: REDCap data from project exported as list
+    :param subject_id: Subject ID as string
+    :return: study as dict
     """
     for study in data:
         if(study.get('study_no')==subject_id):
@@ -33,9 +35,11 @@ def retrieve_subject(data,subject_id):
     LOGGER.error("Subject not found in REDCap")
     sys.exit(1)
 
-def get_type_of_scans(subject):
+def get_scan_numbers(subject):
     """
-    :return: list of scans under subject ID 
+    Retrieves the scan numbers
+    :param subject: study as dict
+    :return: dict of scans with scan number 
     """
     scannum={}
     scan_types={1: 'hranat', 2: 'mse', 3: 'sir', 4: 'dti'}
@@ -46,7 +50,9 @@ def get_type_of_scans(subject):
 
 def get_mouse_slot_no(subject): 
     """
-
+    Creates list with the mouse slot numbers in the order as recorded on REDCAP database.
+    :param: study as dict
+    :return: mouse slot numbers as list
     """
     no_of_slots = int(subject.get('holder_info'))
     mouse_id = []
@@ -57,6 +63,11 @@ def get_mouse_slot_no(subject):
 
 def generate_text_file(scannum,mouse_id,file_path):
     """
+    Opens file if not exists, populates string, saves file.
+    :param scannum: dict of scan numbers
+    :param mouse_id: mouse slot numbers as list
+    :param file_path: string of filepath
+    :return: None
     """
     if os.path.exists(file_path):
         os.remove(file_path)
@@ -73,6 +84,8 @@ def generate_text_file(scannum,mouse_id,file_path):
 
 def add_to_parser():
     """
+    Add arguments to default parser
+    :return: parser object
     """
     parser = argparse.ArgumentParser(description='REDCap to XNAT')
     parser.add_argument("-k","--key",dest='API_KEY',default=None,\
@@ -95,5 +108,5 @@ if __name__ == '__main__':
     data = project.export_records()
     subject = retrieve_subject(data,OPTIONS.subject)
     mouse_ids = get_mouse_slot_no(subject)
-    scans = get_type_of_scans(subject)
+    scans = get_scan_numbers(subject)
     generate_text_file(scans,mouse_ids,OPTIONS.file_path)
