@@ -1,7 +1,14 @@
 function process(raw,results)
-addpath('Denoise')
-addpath('NIFTI')
 
+% DKK REDCap API Token Key
+apikey='27A46C631F1B95667CFEC4A907108ADB';
+
+% Subject ID in REDCap, should be same as raw scan data folder
+[P F E]=fileparts(raw);
+subjectid=F;
+
+% Run python script to generate input text file for processing scan data
+system(['python3 generate_input_info.py -k ' apikey ' -s ' subjectid ' -f ' raw '/process_input.txt'])
 %% Process Raw Scan Data
 process_scan(raw,results)
 
