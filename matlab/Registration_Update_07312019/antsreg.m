@@ -1,19 +1,17 @@
-% raw='/data/kim/REMMI_Test/ANTS_Test_XNAT/Split_Data/nii';
-% results='/data/kim/REMMI_Test/ANTS_Test_XNAT/Registered';
+function antsreg()
 
-function antsreg(raw,results)
+raw = '/INPUTS';
+results = '/OUTPUT';
+
+% fixed=directory where atlas is stored
+% flabel=directory where atlas labels are stored
+fixed='MDA_Atlas_Data/Data/MAP2006.t2avg_rorient.nii';
+flabel='MDA_Atlas_Data/Data/MDA2006.label_rorient.nii';
 
 % Create results folder if doesn't exist
 mkdir(results)
 
 % Input file must be in .nii or .nii.gz format
-% fixed=directory where atlas is stored
-% flabel=directory where atlas labels are stored
-% fixed='/data/kim/REMMI_Test/ANTS_Test_XNAT/MDA_Atlas_Data/Data/MAP2006.t2avg_rorient.nii';
-% flabel='/data/kim/REMMI_Test/ANTS_Test_XNAT/MDA_Atlas_Data/Data/MDA2006.label_rorient.nii';
-
-fixed='MDA_Atlas_Data/Data/MAP2006.t2avg_rorient.nii';
-flabel='MDA_Atlas_Data/Data/MDA2006.label_rorient.nii';
 
 % Obtain list of brain ids
 draw=dir(raw);
