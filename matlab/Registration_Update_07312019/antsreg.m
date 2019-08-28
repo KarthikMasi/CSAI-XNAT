@@ -75,7 +75,7 @@ for ii=1:length(brain_idx)
             ' -out ' affout ' -omat ' afftrans])
         
         % Run script with basic inputs for antsRegistration
-        system(['bash antsreg_input.sh ' fixed ' ' affmorph ' ' tag])
+        system(['bash antsreg_input.sh ' fixed ' ' affout ' ' tag])
         
         % Nonrigid deformation of hranat image to match fixed/atlas image using
         % transformation file 'warp'
