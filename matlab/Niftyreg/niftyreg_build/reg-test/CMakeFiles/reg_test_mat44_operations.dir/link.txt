@@ -1,1 +1,0 @@
-/usr/bin/c++.exe   -fopenmp  -Wl,--enable-auto-import CMakeFiles/reg_test_mat44_operations.dir/reg_test_mat44_operations.cpp.o  -o reg_test_mat44_operations.exe -Wl,--out-implib,libreg_test_mat44_operations.dll.a -Wl,--major-image-version,0,--minor-image-version,0  ../reg-lib/lib_reg_maths.a ../reg-io/nifti/libreg_nifti.a ../reg-io/zlib/libz.a 

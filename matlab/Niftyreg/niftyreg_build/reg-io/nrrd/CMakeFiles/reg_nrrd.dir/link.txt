@@ -1,2 +1,0 @@
-/usr/bin/ar.exe cq libreg_nrrd.a  CMakeFiles/reg_nrrd.dir/reg_nrrd.cpp.o
-/usr/bin/ranlib.exe libreg_nrrd.a
