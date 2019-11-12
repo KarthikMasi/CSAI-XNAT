@@ -1,2 +1,0 @@
-/usr/bin/ar.exe cq lib_reg_ReadWriteImage.a  CMakeFiles/_reg_ReadWriteImage.dir/_reg_ReadWriteImage.cpp.o
-/usr/bin/ranlib.exe lib_reg_ReadWriteImage.a

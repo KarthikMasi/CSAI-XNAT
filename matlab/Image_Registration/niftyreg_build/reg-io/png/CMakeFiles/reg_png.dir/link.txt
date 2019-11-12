@@ -1,2 +1,0 @@
-/usr/bin/ar.exe cq libreg_png.a  CMakeFiles/reg_png.dir/reg_png.cpp.o CMakeFiles/reg_png.dir/readpng.cpp.o
-/usr/bin/ranlib.exe libreg_png.a

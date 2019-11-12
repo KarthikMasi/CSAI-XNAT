@@ -1,2 +1,0 @@
-/usr/bin/ar.exe cq lib_reg_resampling.a  CMakeFiles/_reg_resampling.dir/_reg_resampling.cpp.o
-/usr/bin/ranlib.exe lib_reg_resampling.a
