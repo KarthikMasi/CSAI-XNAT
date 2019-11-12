@@ -1,0 +1,220 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-apps/reg_resample.cpp
+_reg_ReadWriteImage.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-apps/_reg_ReadWriteImage.h
+_reg_resampling.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-apps/_reg_resampling.h
+_reg_globalTransformation.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-apps/_reg_globalTransformation.h
+_reg_localTransformation.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-apps/_reg_localTransformation.h
+_reg_tools.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-apps/_reg_tools.h
+reg_resample.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-apps/reg_resample.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-apps/reg_resample.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/_reg_ReadWriteImage.h
+nifti1_io.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nifti1_io.h
+string
+-
+reg_png.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/reg_png.h
+reg_nrrd.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/reg_nrrd.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nifti/nifti1.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nifti/nifti1_io.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+math.h
+-
+ctype.h
+-
+nifti1.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nifti/nifti1.h
+znzlib.h
+-
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nifti/znzlib.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+stdarg.h
+-
+itk_zlib.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nifti/itk_zlib.h
+zlib.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nifti/zlib.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/NrrdIO/NrrdIO.h
+NrrdConfigure.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/NrrdIO/NrrdConfigure.h
+stdio.h
+-
+stdlib.h
+-
+math.h
+-
+string.h
+-
+ctype.h
+-
+stdarg.h
+-
+float.h
+-
+itk_NrrdIO_mangle.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/NrrdIO/itk_NrrdIO_mangle.h
+limits.h
+-
+errno.h
+-
+stddef.h
+-
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/NrrdIO/itk_NrrdIO_mangle.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/reg_nrrd.h
+nifti1_io.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/nifti1_io.h
+NrrdIO.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/NrrdIO.h
+_reg_tools.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/_reg_tools.h
+_reg_maths.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/nrrd/_reg_maths.h
+limits
+-
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/lpng1510/png.h
+pnglibconf.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/lpng1510/pnglibconf.h
+setjmp.h
+-
+time.h
+-
+pngconf.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/lpng1510/pngconf.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/lpng1510/pngconf.h
+limits.h
+-
+strings.h
+-
+string.h
+-
+stdio.h
+-
+dos.h
+-
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/readpng.h
+png.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/png.h
+zlib.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/zlib.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/reg_png.h
+nifti1_io.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/nifti1_io.h
+readpng.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/readpng.h
+_reg_tools.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/png/_reg_tools.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/zlib/zconf.h
+windows.h
+-
+sys/types.h
+-
+unistd.h
+-
+unixio.h
+-
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/zlib/zlib.h
+zconf.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-io/zlib/zconf.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_globalTransformation.h
+nifti1_io.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/nifti1_io.h
+fstream
+-
+limits
+-
+_reg_maths.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_maths.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_localTransformation.h
+nifti1_io.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/nifti1_io.h
+_reg_globalTransformation.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_globalTransformation.h
+float.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/float.h
+limits
+-
+_reg_maths.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_maths.h
+_reg_tools.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_tools.h
+emmintrin.h
+-
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_maths.h
+stdlib.h
+-
+stdio.h
+-
+math.h
+-
+iostream
+-
+nifti1_io.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/nifti1_io.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_resampling.h
+nifti1_io.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/nifti1_io.h
+_reg_globalTransformation.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_globalTransformation.h
+_reg_maths.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_maths.h
+
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_tools.h
+nifti1_io.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/nifti1_io.h
+fstream
+-
+limits
+-
+_reg_maths.h
+/cygdrive/d/DongKyuKim/Magnetic Resonance/REMMI Test/niftyreg_source/reg-lib/_reg_maths.h
+float.h
+-
+time.h
+-
+
+NrrdConfigure.h
+
+pnglibconf.h
+

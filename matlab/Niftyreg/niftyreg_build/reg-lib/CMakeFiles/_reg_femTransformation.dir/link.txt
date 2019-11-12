@@ -1,0 +1,2 @@
+/usr/bin/ar.exe cq lib_reg_femTransformation.a  CMakeFiles/_reg_femTransformation.dir/_reg_femTransformation.cpp.o
+/usr/bin/ranlib.exe lib_reg_femTransformation.a
