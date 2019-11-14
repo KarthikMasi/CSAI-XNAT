@@ -1,9 +1,13 @@
+% Creates a QA pdf by displaying several slices in img
+% Can specify a [min max] colormap color range for varargin
 function generate_pdf(img,savdir,filename,varargin)
 
+% Enhance contrast in HRANAT image
 if strcmp(filename,'hranat')
     img=histeq(img./max(img(:)));
 end
 
+% Find axial slices that are not background (>0)
 ind = find(img(:)>0);
 [~,~,k]=ind2sub(size(img),ind);
 

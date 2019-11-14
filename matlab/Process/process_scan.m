@@ -26,10 +26,12 @@ info.spath = fullfile(raw);
 % Directory to save
 fullmat = fullfile(results,'Full_Data');
 parammat = fullfile(results,'Parameter_Maps');
+pdfdir = fullfile(results,'QA_PDF');
 
 % Create save directory if it doesn't exist
 mkdir(fullfile(results,'Full_Data'));
 mkdir(fullfile(results,'Parameter_Maps'));
+mkdir(fullfile(results,'QA_PDF'));
 
 %% HRANAT
 if ~isempty(find(contains(M{1},'scannum.hranat')))
@@ -38,15 +40,21 @@ if ~isempty(find(contains(M{1},'scannum.hranat')))
     
     % Reconstruct the data
     ws_hranat.images = remmi.recon(info);
+    
+    % Remove Gibbs ringing
+    newimg=abs(ws_hranat.images.img);
+    tmpmask=newimg./max(newimg(:))>0.2;
+    tmpimg=unring(newimg,tmpmask);
+    ws_hranat.images.img=tmpimg;
 
     % Save image in MAT
     hranat=ws_hranat.images.img;
 
-    % Reorient to align with atlas
+    % Reorient for splitting 
     rhranat=reorient2(abs(hranat),'hranat');
     save(fullfile(parammat,'hranat.mat'),'rhranat');
     
-    generate_pdf(rhranat,parammat,'hranat');
+    generate_pdf(rhranat,pdfdir,'hranat');
 end
 
 %% MSE
@@ -72,6 +80,15 @@ if ~isempty(find(contains(M{1},'scannum.mse')))
     ws_mse.dimages = dimages;
     clear dimages
     
+    % Remove gibbs ringing artifact from image
+    tmpimg=zeros(size(ws_mse.dimages.img));
+    for jj=1:size(tmpimg,4)   
+        newimg=squeeze(abs(ws_mse.dimages.img(:,:,:,jj)));
+        tmpmask=newimg./max(newimg(:))>0.2;
+        tmpimg(:,:,:,jj)=unring(newimg,tmpmask);
+    end
+    ws_mse.dimages.img=tmpimg;
+    
     % Multi-exponential T2 Analysis using MERA
     [metrics,fitting,analysis]= remmi.mse.mT2options;
     metrics = rmfield(metrics,'gmT2');
@@ -84,7 +101,7 @@ if ~isempty(find(contains(M{1},'scannum.mse')))
     fitting.numberT = 100;
     fitting.rangeT = [ws_mse.images.pars.te(1)*.75,ws_mse.images.pars.te(end)*4/3];
     
-    fitting.rangetheta = [135 180]; % normally use 135,180, but B1 is close to 180
+    fitting.rangetheta = [140 180]; % normally use 135,180, but B1 is close to 180
     fitting.numbertheta = 10;
     fitting.fixedT1 = .2; % based on previous IR anlaysis
     analysis.tolextract = 0;
@@ -110,6 +127,16 @@ if ~isempty(find(contains(M{1},'scannum.mse')))
     catch
         warning('mse.T2spect.mat is in MSE.mat');
     end
+    
+    % Save image in MAT
+    mwf=ws_mse.T2spect.MWF2;
+
+    % Reorient for splitting
+    rmwf=reorient2(mwf);
+    
+    save(fullfile(parammat,'mwf.mat'),'rmwf');
+    
+    generate_pdf(rmwf,pdfdir,'mwf',[0 .1]);
 end
 
 %% SIR
@@ -135,21 +162,27 @@ if ~isempty(find(contains(M{1},'scannum.sir')))
     ws_sir.dimages = dimages;
     clear dimages
     
+    % Remove gibbs ringing artifact from image
+    tmpimg=zeros(size(ws_sir.dimages.img));
+    for jj=1:size(tmpimg,4)
+        newimg=squeeze(abs(ws_sir.dimages.img(:,:,:,jj)));
+        tmpmask=newimg./max(newimg(:))>0.2;
+        tmpimg(:,:,:,jj)=unring(newimg,tmpmask);
+    end
+    ws_sir.dimages.img=tmpimg;
+    
     % Perform qMT analysis
     ws_sir.qMT = remmi.ir.qmt(ws_sir.dimages); 
     
     % Save image in MAT
     bpf=ws_sir.qMT.BPF;
-    rawimg=abs(ws_sir.images.img(:,:,:,end));
 
-    % Reorient to align with atlas
+    % Reorient for splitting
     rbpf=reorient2(bpf);
-    rrawimg=reorient2(rawimg);
     
     save(fullfile(parammat,'bpf.mat'),'rbpf');
-    save(fullfile(parammat,'rawimg.mat'),'rrawimg');
     
-    generate_pdf(rbpf,parammat,'bpf',[0 .3]);
+    generate_pdf(rbpf,pdfdir,'bpf',[0 .2]);
 end
 
 %% DTI
@@ -172,24 +205,25 @@ if ~isempty(find(contains(M{1},'scannum.dti')))
     % Save image in MAT
     fa=ws_dti.dti.fa;
     adc=ws_dti.dti.adc;
-    % Reorient to align with atlas
+    % Reorient for splitting
     rfa=reorient2(fa);
     radc=reorient2(adc);
     save(fullfile(parammat,'fa.mat'),'rfa');
     save(fullfile(parammat,'adc.mat'),'radc');
-    
-    
-    generate_pdf(rfa,parammat,'fa',[0 1]);
-    generate_pdf(radc,parammat,'adc',[0 .4]);
+        
+    generate_pdf(rfa,pdfdir,'fa',[0 1]);
+    generate_pdf(radc,pdfdir,'adc',[0 .4]);
 end
 
 %% PDF Generation for QA
 
-% Current images: HRANAT, BPF, T1, Inv_eff, ADC, FA
+% Current images: HRANAT, MWF, BPF, ADC, FA
 
 % XNAT detects only 1 master pdf
-create_master_pdf(parammat);
-status = movefile(fullfile(parammat,'nii.pdf'),results);
-system(['rm -f ' fullfile(parammat,'*.pdf')]);
+create_master_pdf(pdfdir);
+% Move QA pdf into results and delete pdf directory
+% containing individual pdfs
+status = movefile(fullfile(pdfdir,'QA.pdf'),results);
+system(['rm -rf ' pdfdir]);
 
 

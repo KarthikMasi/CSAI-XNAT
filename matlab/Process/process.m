@@ -40,23 +40,42 @@ mkdir(fullfile(results,'Split_Data'));
 mkdir(fullfile(results,'Split_Data','mat'));
 mkdir(fullfile(results,'Split_Data','nii'));
 
-
-% Split rawimg data and obtain coordinates to split remaining data
-tmp=load(fullfile(results,'Parameter_Maps','rawimg.mat'));
+% Split HRANAT data
+% Relevant image files are stored in /results/Parameter_Maps
+% Read data from that folder
+tmp=load(fullfile(results,'Parameter_Maps','hranat.mat'));
 img=abs(cell2mat(struct2cell(tmp)));
+
 out=splitn(img,length(brain_idx));
-coords=out.coords;
+coords=zeros(size(out.coords));
+
+% Coordinates for splitting must be integers
+coords(:,[1 3])=3*floor(out.coords/3); % Floor minx and miny coords
+coords(:,[2 4])=3*ceil(out.coords/3);  % Ceil maxx and maxy coords
+
+coords(coords<3)=1; % minx and miny coords cannot be less than 1
+
+tmp=coords(:,2);
+tmp(tmp>size(img,1))=size(img,1); % maxx coord threshold
+coords(:,2)=tmp;
+
+tmp=coords(:,4);
+tmp(tmp>size(img,2))=size(img,2); % maxy coord threshold
+coords(:,4)=tmp;
+
+out=splitn(img,length(brain_idx),coords);
 for ii=1:length(brain_idx)
     segimg=out.segimg{ii};
-    save(fullfile(splitmat,[char(brain_idx(ii)) '_split_' 'rawimg.mat']),'segimg')
+    save(fullfile(splitmat,[char(brain_idx(ii)) '_split_' 'hranat.mat']),'segimg')
 end
 
 % Use coordinates to split remaining data in /results/Parameter_Maps
 files1=dir(fullfile(results,'Parameter_Maps'));
 
+coords=ceil(coords/3); % Parameter map data is 1/3 image size of HRANAT
 for ii=3:length(files1)
     filenames1=files1(ii).name;
-    if ~strcmp(filenames1,'rawimg.mat') && ~strcmp(filenames1,'hranat.mat')
+    if ~strcmp(filenames1,'hranat.mat')
         tmp=load(fullfile(results,'Parameter_Maps',filenames1));
         img=abs(cell2mat(struct2cell(tmp)));
         out=splitn(img,length(brain_idx),coords);
@@ -68,33 +87,14 @@ for ii=3:length(files1)
     end
 end
 
-% Relevant image files are stored in /results/Parameter_Maps
-% Read data from that folder
-tmp=load(fullfile(results,'Parameter_Maps','hranat.mat'));
-img=abs(cell2mat(struct2cell(tmp)));
 
-% Split HRANAT data
-
-% HRANAT generally has higher spatial resolution than the other parameter
-% maps
-% To find the coordinates used to split HRANAT data, multiply coords by
-% the factor of how much higher the HRANAT spatial resolution is
-
-tmp=load(fullfile(results,'Full_Data','hranat.mat'));
-res1=tmp.images.pars.methpars.PVM_SpatResol;
-
-tmp=load(fullfile(results,'Full_Data','sir.mat'));
-res2=tmp.images.pars.methpars.PVM_SpatResol;
-
-out=splitn(img,length(brain_idx),int16(coords*(res2(1)/res1(1))));
-for ii=1:length(brain_idx)
-    segimg=out.segimg{ii};
-    save(fullfile(splitmat,[char(brain_idx(ii)) '_split_' 'hranat.mat']),'segimg')
-end
 
 %% Reorient all data in Split_Data folder to reflect true anatomical LPS
  % orientation
 files1=dir(splitmat);
+
+tmp=load(fullfile(results,'Full_Data','hranat.mat'));
+voxdim=tmp.images.pars.methpars.PVM_SpatResol;
 
 for ii=3:length(files1)
     filenames1=files1(ii).name;
@@ -102,17 +102,15 @@ for ii=3:length(files1)
     tmp=load(fullfile(splitmat,filenames1));
     img=abs(cell2mat(struct2cell(tmp)));
     
+    % Resize parameter maps to match hranat resolution
+    if ~contains(filenames1,'hranat')
+        img=imresize3(img,3);
+    end
+    
     out=reorient(img);
     save(fullfile(splitmat,filenames1),'out');
     
     niftiwrite(out,fullfile(splitnii,[name1 '.nii']))
-    if contains(filenames1,'hranat')
-        tmp=load(fullfile(results,'Full_Data','hranat.mat'));
-        voxdim=tmp.images.pars.methpars.PVM_SpatResol;
-    else
-        tmp=load(fullfile(results,'Full_Data','sir.mat'));
-        voxdim=tmp.images.pars.methpars.PVM_SpatResol;
-    end
     
     % Correct NIFTI header info
     hdrinfo(fullfile(splitnii,[name1 '.nii']),voxdim);
