@@ -56,8 +56,8 @@ out=splitn(img,length(brain_idx));
 coords=zeros(size(out.coords));
 
 % Coordinates for splitting must be integers
-coords(:,[1 3])=3*floor(out.coords/3); % Floor minx and miny coords
-coords(:,[2 4])=3*ceil(out.coords/3);  % Ceil maxx and maxy coords
+coords(:,[1 3])=3*floor(out.coords(:,[1 3])/3); % Floor minx and miny coords
+coords(:,[2 4])=3*ceil(out.coords(:,[2 4])/3);  % Ceil maxx and maxy coords
 
 coords(coords<3)=1; % minx and miny coords cannot be less than 1
 
