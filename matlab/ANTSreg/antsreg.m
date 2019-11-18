@@ -5,8 +5,8 @@ results = '/OUTPUTS';
 
 % fixed=directory where atlas is stored
 % flabel=directory where atlas labels are stored
-fixed='MDA_Atlas_Data/Data/MAP2006.t2avg_rorient.nii';
-flabel='MDA_Atlas_Data/Data/MDA2006.label_rorient.nii';
+fixed='/extra/MDA_Atlas_Data/Data/MAP2006.t2avg_rorient.nii';
+flabel='/extra/MDA_Atlas_Data/Data/MDA2006.label_rorient.nii';
 
 % Create results folder if doesn't exist
 mkdir(results)
@@ -52,12 +52,12 @@ for ii=1:length(brain_idx)
         ' -out ' afflabel ' -applyxfm -init ' afftrans])
     
     % Run script with basic inputs for antsRegistration
-    system(['bash antsreg_input.sh ' affmorph ' ' fixed ' ' tag])
+    system(['bash /extra/antsreg_input.sh ' affmorph ' ' fixed ' ' tag])
     
     % Nonrigid deformation of fixed/atlas image to match hranat image using
     % affine transformation file 'warp'
-    system(['bash antstrans.sh ' affmorph ' ' nonrig ' ' moving ' ' warp])
-    system(['bash antsmorphlabel.sh ' afflabel ' ' nonriglabel ' ' moving ' ' warp])
+    system(['bash /extra/antstrans.sh ' affmorph ' ' nonrig ' ' moving ' ' warp])
+    system(['bash /extra/antsmorphlabel.sh ' afflabel ' ' nonriglabel ' ' moving ' ' warp])
     
     
     %% ANTS Affine and Nonrigid Registration of HRANAT
@@ -74,11 +74,11 @@ for ii=1:length(brain_idx)
         ' -out ' affout ' -omat ' afftrans])
     
     % Run script with basic inputs for antsRegistration
-    system(['bash antsreg_input.sh ' fixed ' ' affout ' ' tag])
+    system(['bash /extra/antsreg_input.sh ' fixed ' ' affout ' ' tag])
     
     % Nonrigid deformation of hranat image to match fixed/atlas image using
     % transformation file 'warp'
-    system(['bash antstrans.sh ' affout ' ' nonrig ' ' fixed ' ' warp])
+    system(['bash /extra/antstrans.sh ' affout ' ' nonrig ' ' fixed ' ' warp])
     
     %% ANTS Affine and Nonrigid Registration of parameter maps
     
@@ -100,7 +100,7 @@ for ii=1:length(brain_idx)
             
             % Nonrigid deformation of parameter map to fixed/atlas image using
             % transformation file 'warp'
-            system(['bash antstrans.sh ' affout ' ' nonrig ' ' fixed ' ' warp])
+            system(['bash /extra/antstrans.sh ' affout ' ' nonrig ' ' fixed ' ' warp])
         else
             % Do nothing if 'else'
         end
