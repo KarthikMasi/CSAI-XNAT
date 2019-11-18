@@ -1,7 +1,7 @@
 function antsreg()
 
 raw = '/INPUTS';
-results = '/OUTPUT';
+results = '/OUTPUTS';
 
 % fixed=directory where atlas is stored
 % flabel=directory where atlas labels are stored

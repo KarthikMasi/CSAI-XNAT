@@ -1,4 +1,7 @@
-function process(raw,results)
+function process()
+
+raw = '/INPUTS';
+results = '/OUTPUTS';
 
 % DKK REDCap API Token Key
 apikey='27A46C631F1B95667CFEC4A907108ADB';
