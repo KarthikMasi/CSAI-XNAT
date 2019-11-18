@@ -14,7 +14,7 @@ apikey='27A46C631F1B95667CFEC4A907108ADB';
 subjectid=F;
 
 % Run python script to generate input text file for processing scan data
-system(['python3 generate_input_info.py -k ' apikey ' -s ' subjectid ' -f ' raw '/process_input.txt'])
+system(['/usr/bin/python generate_input_info.py -k ' apikey ' -s ' subjectid ' -f ' raw '/process_input.txt'])
 %% Process Raw Scan Data
 process_scan(raw,results)
 
