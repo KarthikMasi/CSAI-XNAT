@@ -1,7 +1,10 @@
 function process()
 
-raw = '/INPUTS';
+tmpraw = '/INPUTS';
 results = '/OUTPUTS';
+
+list=dir(tmpraw);
+raw=[tmpraw '/' list(3).name];
 
 % DKK REDCap API Token Key
 apikey='27A46C631F1B95667CFEC4A907108ADB';
