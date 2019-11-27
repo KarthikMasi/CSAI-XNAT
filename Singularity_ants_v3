@@ -58,15 +58,24 @@ From: ubuntu:16.04
     cd /bin/ants
     cmake /tmp/code/ANTs
     make
+    cd /bin/ants/ANTS-build
+    make install
     rm -rf /tmp/code
     mkdir -p /INPUTS
     mkdir -p /OUTPUTS
     mkdir -p /extra
 
 %environment
-    export ANTSPATH=/bin/ants/bin/
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/usr/local/MATLAB/MATLAB_Runtime/v95/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v95/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v95/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v95/extern/bin/glnxa64
+
+    FSLDIR=/usr/local/fsl
+    . ${FSLDIR}/etc/fslconf/fsl.sh
+    PATH=${FSLDIR}/bin:${PATH}
+    export FSLDIR PATH
+
+    export ANTSPATH=/opt/ANTs/bin/
     export PATH=${ANTSPATH}:$PATH
-    export PATH=/usr/local/fsl/bin/:$PATH
+
 %runscript
     exec sh run_antsreg.sh
  
