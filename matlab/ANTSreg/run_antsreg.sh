@@ -18,8 +18,6 @@ else
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/bin/glnxa64 ;
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/os/glnxa64;
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${MCRROOT}/sys/opengl/lib/glnxa64;
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/MATLAB/MATLAB_Runtime/v95/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v95/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v95/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v95/extern/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v95/sys/opengl/lib/glnxa64;
-
   export LD_LIBRARY_PATH;
   echo LD_LIBRARY_PATH is ${LD_LIBRARY_PATH};
   shift 1
@@ -29,7 +27,7 @@ else
       args="${args} \"${token}\"" 
       shift
   done
-  eval "\"${exe_dir}/antsreg\"" ${LD_LIBRARY_PATH}
+  eval "\"${exe_dir}/antsreg\"" $args
 fi
 exit
 
