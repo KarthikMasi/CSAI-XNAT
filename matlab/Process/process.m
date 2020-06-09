@@ -31,7 +31,7 @@ M = textscan(fid,'%s %s',...
 'Delimiter','=');
 
 % Extract brain identifiers from text file
-tmp=M{2}{4};
+tmp=M{2}{end};
 tmp2=strsplit(tmp,','); % Separate elements with comma delimeter
 brain_idx=string(cellfun(@(c) erase({c},' '),tmp2)); % Remove extra spaces if any
 
