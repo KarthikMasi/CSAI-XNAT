@@ -20,13 +20,7 @@ From: ubuntu:16.04
     python -m pip install ipython
     apt-get -y install vim
     apt-get -y install tar
-    mkdir -p /tmp/gs
-    cd /tmp/gs
-    wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/ghostscript-9.22-linux-x86_64.tgz --no-check-certificate
-    tar xvf ghostscript-9.22-linux-x86_64.tgz
-    mv ghostscript-9.22-linux-x86_64/gs-922-linux-x86_64 /usr/bin
-    cd ..
-    rm -rf /tmp/gs
+    apt-get -y install ghostscript
     mkdir -p /tmp/matlab_mcr
     cd /tmp/matlab_mcr/
     wget https://ssd.mathworks.com/supportfiles/downloads/R2018b/deployment_files/R2018b/installers/glnxa64/MCR_R2018b_glnxa64_installer.zip
